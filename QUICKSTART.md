@@ -7,44 +7,61 @@
 直接告诉 AI 你需要什么：
 
 ```
-请生成 Spring Boot v2.3.12 课程讲义
+请生成 Spring Security 5.3.9.RELEASE 课程讲义
 - 课程层次：本科高级
 - 学时：48学时（理论36 + 实验12）
 - 重点：深度源码分析 + 实战示例
-- 生成超详细版（30万字）
-- 上传到飞书
+- 生成超详细版（27万字）
+- 发布到GitHub
 ```
 
-AI 会自动执行完整流程并返回飞书链接。
+AI 会自动执行完整流程并返回 GitHub 仓库链接。
 
 ### 方式2：使用脚本
 
 ```bash
 cd /root/.openclaw/workspace/skills/course-generator/scripts
 
-# 基础版
-bash generate-course.sh -n "Spring Boot" -v "v2.3.12" -l "本科高级"
+# 1. 生成初版讲义
+bash generate-course.sh -n "Spring Security" -v "5.3.9.RELEASE" -l "本科高级"
 
-# 超详细版（使用子agent并行）
-bash generate-course.sh -n "Spring Boot" -v "v2.3.12" -d
+# 2. 生成详细版（使用子agent并行）
+bash generate-course.sh -n "Spring Security" -v "5.3.9.RELEASE" -d
 
-# 完整流程（生成+飞书+GitHub）
-bash generate-course.sh -n "Spring Boot" -v "v2.3.12" -d --feishu --github
+# 3. 发布到GitHub
+python3 publish_to_github.py /tmp/spring-security-course-complete.md \
+    spring-security-5.3.9-course \
+    --title "Spring Security 5.3.9.RELEASE 课程讲义" \
+    --level "本科高级" \
+    --hours "48学时" \
+    --topics "spring-security,spring-boot,security,authentication,authorization"
 ```
 
 ## 📋 参数说明
 
+### generate-course.sh 参数
+
 | 参数 | 说明 | 示例 |
 |------|------|------|
-| `-n, --name` | 课程名称 | `Spring Boot` |
-| `-v, --version` | 课程版本 | `v2.3.12.RELEASE` |
+| `-n, --name` | 课程名称 | `Spring Security` |
+| `-v, --version` | 课程版本 | `5.3.9.RELEASE` |
 | `-l, --level` | 课程层次 | `本科高级` / `研究生` |
 | `-h, --hours` | 总学时 | `48` |
 | `-t, --theory` | 理论学时 | `36` |
 | `-e, --experiment` | 实验学时 | `12` |
 | `-d, --detailed` | 生成详细版（使用子agent） | - |
-| `--feishu` | 上传到飞书 | - |
-| `--github` | 上传到GitHub | - |
+
+### publish_to_github.py 参数
+
+| 参数 | 说明 | 示例 |
+|------|------|------|
+| `file` | 课程文件路径 | `/tmp/course.md` |
+| `repo_name` | GitHub仓库名 | `spring-security-course` |
+| `--title` | 课程标题 | `Spring Security 讲义` |
+| `--version` | 教材版本 | `5.3.9.RELEASE` |
+| `--level` | 课程层次 | `本科高级` |
+| `--hours` | 总学时 | `48学时` |
+| `--topics` | 仓库topics（逗号分隔） | `spring,security,tutorial` |
 
 ## 📊 输出规格
 
